@@ -1,0 +1,19 @@
+
+#Replace cassandra yaml file into server
+
+- name: Copy Cassandra configuration template into redhat
+  template:
+    # src: redhat_cassandra.yaml.j2
+    src: /home/parsu/demo.yaml.j2
+    dest: /etc/cassandra/default.conf/cassandra.yaml
+  notify: Restart Cassandra
+
+- meta: flush_handlers
+
+- name: See Nodetool Status
+  command: "nodetool status"
+  register: status
+
+- name: Debug Nodetool status
+  debug:
+    var: status

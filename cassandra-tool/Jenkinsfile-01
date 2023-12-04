@@ -1,0 +1,25 @@
+pipeline {
+  agent any
+    environment {
+   ANSIBLE_PRIVATE_KEY=credentials('terraform.pem') 
+  }
+  stages {
+    stage('Ping Ubuntu') {
+      steps {
+        sh 'ansible  --private-key=$ANSIBLE_PRIVATE_KEY  -u ubuntu -m ping tag_Name_gitserver'
+      }
+    }
+
+ stage('list Ubuntu') {
+      steps {
+        sh 'ansible-inventory --graph'
+      }
+    }
+
+    stage('running cassandra role') {
+      steps {
+         sh 'ansible-playbook --private-key=$ANSIBLE_PRIVATE_KEY -u ubuntu finaltool/tests/test.yml --tags "install_cassandra_ubuntu"'
+      }
+    }
+  }
+}
