@@ -1,25 +1,34 @@
 pipeline {
-  agent any
+    agent any
+
     environment {
-   ANSIBLE_PRIVATE_KEY=credentials('terraform.pem') 
-  }
-  stages {
-    stage('Ping Ubuntu') {
-      steps {
-        sh 'ansible  --private-key=$ANSIBLE_PRIVATE_KEY  -u ubuntu -m ping tag_Name_gitserver'
-      }
+        ANSIBLE_PRIVATE_KEY = credentials('terraform.pem')
+        REPO_URL = 'https://github.com/parsugit/cassandra-ansible-role.git'
     }
 
- stage('list Ubuntu') {
-      steps {
-        sh 'ansible-inventory --graph'
-      }
-    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_URL}"]]])
+            }
+        }
 
-    stage('running cassandra role') {
-      steps {
-         sh 'ansible-playbook --private-key=$ANSIBLE_PRIVATE_KEY -u ubuntu finaltool/tests/test.yml --tags "install_cassandra_ubuntu"'
-      }
+        stage('List Ubuntu') {
+            steps {
+                sh "ansible-inventory --graph"
+            }
+        }
+
+        stage('Install Cassandra') {
+            steps {
+                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} -u ubuntu cassandra-tool/tests/test.yml --tags 'install_cassandra_ubuntu'"
+            }
+        }
+
+        stage('Change Cassandra Config') {
+            steps {
+                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} -u ubuntu cassandra-tool/tests/test.yml --tags 'change_ubuntu_config'"
+            }
+        }
     }
-  }
 }
