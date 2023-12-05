@@ -3,8 +3,7 @@
 
 - name: Copy Cassandra configuration template into redhat
   template:
-    # src: redhat_cassandra.yaml.j2
-    src: /home/parsu/demo.yaml.j2
+    src: redhat_cassandra.yaml.j2
     dest: /etc/cassandra/default.conf/cassandra.yaml
   notify: Restart Cassandra
 

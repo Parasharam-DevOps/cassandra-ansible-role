@@ -15,7 +15,7 @@ cassandra_version: "4.1.3"
 
 # vars for cassandra.yaml
 
-cassandra_seed_nodes: "{{ groups['tag_group_cassandra_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
+cassandra_seed_nodes: "{{ groups['tag_group_cassandra_node'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
 cassandra_endpoint_snitch: "GossipingPropertyFileSnitch"
 
 
