@@ -64,10 +64,6 @@
 
 - meta: flush_handlers
 
-- name: Pause for 30 seconds
-  pause:
-      seconds: 20
-      
 - name: See Nodetool Status 
   command: "/usr/bin/nodetool status"
   register: status
