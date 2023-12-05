@@ -1,5 +1,5 @@
 ---
-- hosts: tag_group_cassandra_node
+- hosts: tag_group_cassandra_nodes
   remote_user: ubuntu 
   become: yes
   gather_facts: yes
