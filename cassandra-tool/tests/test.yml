@@ -4,6 +4,6 @@
   become: yes
   gather_facts: yes
   vars:
-   cassandra_seed_nodes: "{{ groups['cassandra_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
+   cassandra_seed_nodes: "{{ groups['tag_Name_cassandra_nodes'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
   roles:
     - cassandra-tool
