@@ -46,7 +46,7 @@
 
 - meta: flush_handlers
 
-- name: Pause for 30 seconds
+- name: Pause for 20 seconds
   pause:
       seconds: 20
 
