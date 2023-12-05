@@ -73,7 +73,7 @@ seed_provider:
   - class_name: org.apache.cassandra.locator.SimpleSeedProvider
     parameters:
       
-      - seeds: "{{ tag_Name_cassandra_nodes }}"
+      - seeds: "{{ cassandra_nodes }}"
 
 concurrent_reads: 32
 concurrent_writes: 32
