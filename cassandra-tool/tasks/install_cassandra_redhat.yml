@@ -3,28 +3,23 @@
 
 - name: Update package list and install prerequisites
   yum:
-    name: "@Development Tools"
-    state: present
-
-- name: Install vim for edit
-  yum:
-    name: vim
+    name: "{{ development_tools_package }}"
     state: present
 
 - name: Install Python 3
   yum:
-    name: python3
+    name: "{{ python3_package }}"
     state: present
 
 - name: Install pip3
   package:
-    name: python3-pip
+    name: "{{ python3_pip_package }}"
     state: present
 
 - name: Install cqlsh
   pip:
-    name: cqlsh
-    executable: pip3
+    name: "{{ cqlsh_pip_package }}"
+    executable: "{{ pip_executable }}"
 
 - name: Install Java
   package:
@@ -67,6 +62,7 @@
 - name: Pause for 20 seconds
   pause:
       seconds: 20
+  notify: Restart Cassandra
 
 - name: See Nodetool Status 
   command: "/usr/bin/nodetool status"

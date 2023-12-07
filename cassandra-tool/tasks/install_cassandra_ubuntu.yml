@@ -46,9 +46,10 @@
 
 - meta: flush_handlers
 
-- name: Pause for 20 seconds
+- name: Pause for 30 seconds
   pause:
-      seconds: 20
+      seconds: 30
+  
 
 - name: See Nodetool Status
   command: "nodetool status"
