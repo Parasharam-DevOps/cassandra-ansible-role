@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: Parasharam Tanaji Desai
+  description: |
+    Ansible role for installing and configuring Apache Cassandra.
+    This role is part of my self-learning journey during the Mygurukulam Powered by OpsTree DevOpsNinja Program (NinjaBatch-23).
+  company: Mygurukulam (Powered by OpsTree)
+  license: GPL-2.0-or-later
+  min_ansible_version: 2.10
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: RedHat
+      versions:
+        - all
+  galaxy_tags:
+    - cassandra
+    - database
+    
+
+dependencies: []
+  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
+  # if you add dependencies to this list.

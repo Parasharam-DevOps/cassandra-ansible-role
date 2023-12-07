@@ -13,21 +13,24 @@ pipeline {
             }
         }
 
-        stage('List Ubuntu') {
+        stage('List Active Cassandra Servers') {
             steps {
                 sh "ansible-inventory --graph"
             }
         }
 
-        stage('Install Cassandra') {
+        stage('Installing Cassandra') {
             steps {
-                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} -u ubuntu cassandra-tool/tests/test.yml --tags 'install_cassandra_ubuntu'"
+                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'install_cassandra_ubuntu'"
+                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'install_cassandra_redhat'"
+
             }
         }
-
-        stage('Change Cassandra Config') {
+        stage('Updating Cassandra Configuration') {
             steps {
-                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} -u ubuntu cassandra-tool/tests/test.yml --tags 'change_ubuntu_config'"
+                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'change_ubuntu_config'"
+                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'change_redhat_config'"
+
             }
         }
     }
