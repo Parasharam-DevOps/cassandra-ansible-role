@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         ANSIBLE_PRIVATE_KEY = credentials('terraform.pem')
-        REPO_URL = 'https://github.com/parsugit/cassandra-ansible-role.git'
+        REPO_URL = 'https://github.com/Parasharam-DevOps/cassandra-ansible-role.git'
     }
 
     stages {
