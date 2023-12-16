@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/Parasharam-DevOps/cassandra-ansible-role.git'
-        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role/cassandra-role/"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role"
         ANSIBLE_PRIVATE_KEY = "/var/lib/jenkins/workspace/Cassandra-DB-Terraform_Infra/private-key.pem"
     }
 
@@ -19,6 +19,14 @@ pipeline {
                 sh "ansible-inventory --graph"
             }
         }
+
+        stage('Approval For Apply') {
+        
+            steps {
+                input "Do you want to Install Cassandra Into The Server?"
+            }
+        }
+
 
         stage('Installing Cassandra') {
             steps {
