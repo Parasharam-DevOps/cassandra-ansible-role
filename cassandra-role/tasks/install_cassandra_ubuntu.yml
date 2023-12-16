@@ -48,7 +48,7 @@
 
 - name: Pause for 30 seconds
   pause:
-      seconds: 30
+      seconds: 60
   
 
 - name: See Nodetool Status
