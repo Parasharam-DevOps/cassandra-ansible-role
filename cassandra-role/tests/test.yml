@@ -4,4 +4,4 @@
   become: yes
   gather_facts: yes
   roles:
-    - cassandra-tool
+    - cassandra-role
