@@ -30,15 +30,15 @@ pipeline {
 
         stage('Installing Cassandra') {
             steps {
-                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'install_cassandra_ubuntu'"
-                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'install_cassandra_redhat'"
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/master.yml --tags 'install_cassandra_ubuntu'"
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/master.yml --tags 'install_cassandra_redhat'"
             }
         }
 
         stage('Updating Cassandra Configuration') {
             steps {
-                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'change_ubuntu_config'"
-                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'change_redhat_config'"
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/master.yml --tags 'change_ubuntu_config'"
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/master.yml --tags 'change_redhat_config'"
             }
         }
     }
