@@ -25,6 +25,8 @@ install_cassandra() {
   # Start Cassandra service
   sudo service cassandra start
 
+  sleep 20
+
   # Check Cassandra status
   nodetool status
 }

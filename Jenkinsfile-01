@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-        ANSIBLE_PRIVATE_KEY = credentials('terraform.pem')
         REPO_URL = 'https://github.com/Parasharam-DevOps/cassandra-ansible-role.git'
+        TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Terraform_Infra/"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role/cassandra-ansible-role/"
+        ANSIBLE_PRIVATE_KEY = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role/cassandra-ansible-role/private-key.pem"
     }
 
     stages {
@@ -19,19 +21,34 @@ pipeline {
             }
         }
 
-        stage('Installing Cassandra') {
+        stage('Copy Private Key') {
             steps {
-                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'install_cassandra_ubuntu'"
-                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'install_cassandra_redhat'"
-
+                sh "sudo cp ${env.TERRAFORM_WORKSPACE}/private-key.pem ${env.INSTALL_WORKSPACE}"
+                sh "sudo chmod 400 ${env.INSTALL_WORKSPACE}/private-key.pem"
             }
         }
+
+        stage('Installing Cassandra') {
+            steps {
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'install_cassandra_ubuntu'"
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'install_cassandra_redhat'"
+            }
+        }
+
         stage('Updating Cassandra Configuration') {
             steps {
-                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'change_ubuntu_config'"
-                sh "ansible-playbook --private-key=${ANSIBLE_PRIVATE_KEY} cassandra-tool/tests/test.yml --tags 'change_redhat_config'"
-
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'change_ubuntu_config'"
+                sh "ansible-playbook -i ${ANSIBLE_PRIVATE_KEY} ${env.INSTALL_WORKSPACE}/cassandra-role/tests/test.yml --tags 'change_redhat_config'"
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Succeeded!'
+        }
+        failure {
+            echo 'Failed!'
         }
     }
 }
