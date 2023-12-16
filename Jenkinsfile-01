@@ -3,9 +3,8 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/Parasharam-DevOps/cassandra-ansible-role.git'
-        TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Terraform_Infra/"
-        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role/cassandra-ansible-role/"
-        ANSIBLE_PRIVATE_KEY = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role/cassandra-ansible-role/private-key.pem"
+        INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/Cassandra-DB-Ansible-Role/cassandra-role/"
+        ANSIBLE_PRIVATE_KEY = "/var/lib/jenkins/workspace/Cassandra-DB-Terraform_Infra/private-key.pem"
     }
 
     stages {
@@ -18,13 +17,6 @@ pipeline {
         stage('List Active Cassandra Servers') {
             steps {
                 sh "ansible-inventory --graph"
-            }
-        }
-
-        stage('Copy Private Key') {
-            steps {
-                sh "sudo cp ${env.TERRAFORM_WORKSPACE}/private-key.pem ${env.INSTALL_WORKSPACE}"
-                sh "sudo chmod 400 ${env.INSTALL_WORKSPACE}/private-key.pem"
             }
         }
 
