@@ -1,4 +1,9 @@
 pipeline {
+    parameters {
+        booleanParam(name: 'INSTALL_CASSANDRA', defaultValue: false, description: 'Install Cassandra?')
+        booleanParam(name: 'UNINSTALL_CASSANDRA', defaultValue: false, description: 'Uninstall Cassandra?')
+    }
+
     agent any
 
     environment {
@@ -21,24 +26,36 @@ pipeline {
         }
 
         stage('Approval For Apply') {
-        
             steps {
-                input "Do you want to Install Cassandra Into The Server?"
+                script {
+                    if (params.INSTALL_CASSANDRA) {
+                        input "Do you want to Install Cassandra Into The Server?"
+                    } else if (params.UNINSTALL_CASSANDRA) {
+                        input "Do you want to Uninstall Cassandra From The Server?"
+                    }
+                }
             }
         }
 
-
-        stage('Installing Cassandra') {
+        stage('Installing/Uninstalling Cassandra') {
             steps {
-                sh "ansible-playbook  ${env.INSTALL_WORKSPACE}/master.yml --tags 'install_cassandra_ubuntu'"
-                sh "ansible-playbook  ${env.INSTALL_WORKSPACE}/master.yml --tags 'install_cassandra_redhat'"
+                script {
+                    if (params.INSTALL_CASSANDRA) {
+                        sh "ansible-playbook ${env.INSTALL_WORKSPACE}/master.yml --tags 'install_cassandra_ubuntu,install_cassandra_redhat'"
+                    } else if (params.UNINSTALL_CASSANDRA) {
+                        sh "ansible-playbook ${env.INSTALL_WORKSPACE}/master.yml --tags 'uninstall_cassandra_ubuntu,uninstall_cassandra_redhat'"
+                    }
+                }
             }
         }
 
         stage('Updating Cassandra Configuration') {
             steps {
-                sh "ansible-playbook  ${env.INSTALL_WORKSPACE}/master.yml --tags 'change_ubuntu_config'"
-                sh "ansible-playbook  ${env.INSTALL_WORKSPACE}/master.yml --tags 'change_redhat_config'"
+                script {
+                    if (params.INSTALL_CASSANDRA) {
+                        sh "ansible-playbook ${env.INSTALL_WORKSPACE}/master.yml --tags 'change_ubuntu_config,change_redhat_config'"
+                    }
+                }
             }
         }
     }
