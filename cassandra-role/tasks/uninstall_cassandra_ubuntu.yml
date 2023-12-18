@@ -19,5 +19,5 @@
 
 - name: Remove Cassandra repository key
   apt_key:
-    url: "{{ ubuntu_cassandra_repo_key_url }}"
+    url: "{{ cassandra_repo_key_url }}"
     state: absent
