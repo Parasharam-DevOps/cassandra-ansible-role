@@ -3,7 +3,6 @@
 # vars for ubuntu
 ubuntu_java_apt_package: openjdk-11-jre
 ubuntu_cassandra_repo_url: "deb https://debian.cassandra.apache.org 41x main"
-cassandra_repo_key_url: "https://downloads.apache.org/cassandra/KEYS"
 
 # vars for redhat
 development_tools_package: "@Development Tools"
